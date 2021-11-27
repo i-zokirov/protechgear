@@ -1,0 +1,15 @@
+{
+  "name": "protechgear",
+  "version": "1.0.0",
+  "description": "An eCommerce platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon backend/server"
+  },
+  "author": "Ikboljon Zokirov",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.15"
+  }
+}
