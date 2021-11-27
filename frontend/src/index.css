@@ -13,5 +13,18 @@ code {
 }
 
 main{
-  height: 80vh;
+  height: 100vh;
+}
+
+a{
+  text-decoration: none;
+}
+
+.rating span{
+  margin: 0.1rem;
+}
+
+h3{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
