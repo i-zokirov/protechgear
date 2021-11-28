@@ -28,3 +28,7 @@ h3{
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
+
+.logo{
+  text-transform: none;
+}
