@@ -25,10 +25,18 @@ a{
 }
 
 h3{
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 1rem 0
 }
 
+h1{
+  font-size: 1.8rem;
+  padding: 1rem 0;
+}
+
+h2{
+  font-size: 1.4rem;
+  padding: 0.5rem 0;
+}
 .logo{
   text-transform: none;
 }
