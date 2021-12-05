@@ -5,7 +5,7 @@ import { Col, Row, Form, Button } from 'react-bootstrap'
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { getUserDetails } from "../actions/userActions"
+import { getUserDetails, updateUserProfile } from "../actions/userActions"
 
 
 const ProfileScreen = ({location, history}) => {
@@ -22,6 +22,9 @@ const ProfileScreen = ({location, history}) => {
 
     const userLogin = useSelector(state => state.userLogin)
     const {  userInfo } = userLogin
+
+    const userUpdateProfile = useSelector(state => state.userUpdateProfile)
+    const { success } = userUpdateProfile
 
     useEffect(() => {
         if(!userInfo){
@@ -42,7 +45,7 @@ const ProfileScreen = ({location, history}) => {
             setMessage('Passwords do not match!')
         } else {
             // dispatch update profile
-            
+            dispatch(updateUserProfile({id: user._id, name, email, password}))
         }
         
     }
@@ -53,6 +56,7 @@ const ProfileScreen = ({location, history}) => {
                 <h2>My Profile</h2>
                 {message && <Message variant='danger'>{message}</Message>}
                 {error && <Message variant='danger'>{error}</Message>}
+                {success && <Message variant='success'>{'Profile has been updated!'}</Message>}
                 {loading && <Loader />}
                 <Form onSubmit={submitHandler}>
                 
