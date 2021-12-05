@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Form, Button } from 'react-bootstrap'
-
+import { Link } from 'react-router-dom'
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -53,6 +53,7 @@ const ProfileScreen = ({location, history}) => {
     return (
         <Row>
             <Col md={3}>
+                <Link to="/">Go back</Link>
                 <h2>My Profile</h2>
                 {message && <Message variant='danger'>{message}</Message>}
                 {error && <Message variant='danger'>{error}</Message>}

@@ -37,9 +37,13 @@ const cartItemsFromLocalStorage = localStorage.getItem('cartItems') ? JSON.parse
 // get user information from local storage to add to the initial state of the redux store
 const userInfoFromLocalStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
 
+// get shippingAddress from local storage if it is found in localstorage
+const shippingAddressFromLocalStorage = localStorage.getItem('shippingAddress') ? JSON.parse(localStorage.getItem('shippingAddress')) : {}
+
 const initialState = {
     cart: {
-        cartItems: cartItemsFromLocalStorage
+        cartItems: cartItemsFromLocalStorage,
+        shippingAddress: shippingAddressFromLocalStorage
     },
     userLogin: {
         userInfo: userInfoFromLocalStorage
