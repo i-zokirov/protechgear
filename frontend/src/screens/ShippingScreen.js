@@ -5,7 +5,7 @@ import {  Form, Button } from 'react-bootstrap'
 
 import { saveShippingAddress } from '../actions/cartActions'
 import FormContainer from "../components/FormContainer"
-
+import CheckoutSteps from '../components/CheckoutSteps'
 
 const ShippingScreen = ({history}) => {
     console.log(history)
@@ -31,6 +31,7 @@ const ShippingScreen = ({history}) => {
             <Link to="/"><i className="fas fa-arrow-left"></i> Go back</Link>
             
             <FormContainer>
+                <CheckoutSteps step1 step2 />
                 <h1>Shipping</h1>
 
                 <Form onSubmit={(e)=> submitHandler(e)}>
