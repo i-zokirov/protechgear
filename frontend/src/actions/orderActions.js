@@ -2,7 +2,10 @@ import axios from "axios";
 import { 
     ORDER_CREATE_SUCCESS, 
     ORDER_CREATE_FAILURE,
-    ORDER_CREATE_REQUEST, 
+    ORDER_CREATE_REQUEST,
+    ORDER_DETAILS_SUCCESS, 
+    ORDER_DETAILS_FAILURE,
+    ORDER_DETAILS_REQUEST,
 } from "../constants/orderConstants";
 
 export const createOrder = (order) => {
@@ -22,6 +25,29 @@ export const createOrder = (order) => {
         } catch (error) {
             dispatch({
                 type: ORDER_CREATE_FAILURE,
+                payload: error.response && error.response.data.message ? error.response.data.message  : error.message
+            })
+        }
+    }
+}
+
+
+export const getOrderDetails = (orderId) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({type: ORDER_DETAILS_REQUEST})
+
+            const { userLogin: { userInfo } } = getState()
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            }
+            const { data } = await axios.get(`/api/orders/${orderId}`, config)
+            dispatch({type: ORDER_DETAILS_SUCCESS, payload: data})
+        } catch (error) {
+            dispatch({
+                type: ORDER_DETAILS_FAILURE,
                 payload: error.response && error.response.data.message ? error.response.data.message  : error.message
             })
         }
