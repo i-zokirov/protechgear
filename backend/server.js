@@ -29,7 +29,6 @@ app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 
 app.use(notFound)
-
 app.use(errorHandler)
 
 app.listen(PORT, ()=> console.log(`Server is running in ${process.env.NODE_ENV} environment. \nServer PORT: ${PORT}`.cyan))
