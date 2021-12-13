@@ -22,3 +22,7 @@ a{
 .rating span {
   margin: 0.1rem;
 }
+
+.btn-mt-20{
+  margin-top: 20px;
+}

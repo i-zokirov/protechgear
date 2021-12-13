@@ -59,7 +59,7 @@ const PaymentMethodScreen = ({history}) => {
                     </Col>
                 </Form.Group>
                 
-                <Button type="submit" variant='primary'>
+                <Button className='btn-mt-20' type="submit" variant='primary'>
                     Continue
                 </Button>
             </Form>

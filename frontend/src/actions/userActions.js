@@ -13,9 +13,9 @@ import {
     USER_UPDATE_PROFILE_REQUEST,
     USER_UPDATE_PROFILE_SUCCESS,
     USER_UPDATE_PROFILE_FAIL, 
-
+    USER_DETAILS_RESET
 } from "../constants/userConstants"
-
+import {USER_ORDER_LIST_RESET} from "../constants/orderConstants"
 
 export const login = (email, password) => {
     return async (dispatch)=>{
@@ -42,6 +42,8 @@ export const logout = ()=>{
     return async (dispatch)=>{
         localStorage.removeItem('userInfo')
         dispatch({type: USER_LOGOUT})
+        dispatch({type: USER_DETAILS_RESET})
+        dispatch({type: USER_ORDER_LIST_RESET})
     }
 }
 
