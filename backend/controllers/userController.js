@@ -93,3 +93,10 @@ export const updateUserProfile = asyncHandler( async(req, res)=>{
 } )
 
 
+// @desc:   Get list of users for Admin
+// @route:  GET /api/users
+// @access: Private && Admin
+export const getUsersList = asyncHandler(async(req, res)=>{
+    const users = await User.find({})
+    res.json(users)
+})
