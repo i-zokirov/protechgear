@@ -5,13 +5,13 @@ import { Table, Button } from 'react-bootstrap'
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listUsers } from '../actions/userActions'
+import { listUsers, deleteUser } from '../actions/userActions'
 
 const UserListScreen = ({history}) => {
     const dispatch = useDispatch()
     const {loading, users, error} = useSelector(state => state.usersList)
     const { userInfo } = useSelector(state => state.userLogin)
-
+    const {success:successDelete} = useSelector(state => state.userDelete)
 
     useEffect(()=>{
         if(userInfo && userInfo.isAdmin){
@@ -19,10 +19,12 @@ const UserListScreen = ({history}) => {
         } else {
             history.push('/login')
         }    
-    }, [dispatch, history, userInfo])
+    }, [dispatch, history, userInfo, successDelete])
     
     const deleteAccountHandler = (userId)=>{
-
+        if(window.confirm('Are you sure you want to delete this account?')){
+            dispatch(deleteUser(userId))
+        }
     }
     return (
         <React.Fragment>
