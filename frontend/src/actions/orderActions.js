@@ -9,7 +9,6 @@ import {
     ORDER_PAY_SUCCESS, 
     ORDER_PAY_FAILURE,
     ORDER_PAY_REQUEST,
-    ORDER_PAY_RESET,
 } from "../constants/orderConstants";
 
 export const createOrder = (order) => {
@@ -70,7 +69,7 @@ export const payOrder = (orderId, paymentResult) => {
                     Authorization: `Bearer ${userInfo.token}`
                 }
             }
-            const { data } = await axios.put(`/api/orders/${orderId}`, paymentResult, config)
+            const { data } = await axios.put(`/api/orders/${orderId}/pay`, paymentResult, config)
             dispatch({type: ORDER_PAY_SUCCESS, payload: data})
         } catch (error) {
             dispatch({
