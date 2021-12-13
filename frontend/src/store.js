@@ -23,7 +23,9 @@ import {
 import { 
     orderCreateReducer, 
     orderDetailsReducer, 
-    orderPayReducer } from "./reducers/orderReducers";
+    orderPayReducer,
+    userOrderListReducer
+} from "./reducers/orderReducers";
 
 const middleware = [thunk]
 
@@ -37,7 +39,8 @@ const reducer = combineReducers({
     userUpdateProfile: userUpdateProfileReducer,
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
-    orderPay: orderPayReducer
+    orderPay: orderPayReducer,
+    userOrdersList: userOrderListReducer
 })
 
 // get cart items from local storage to add to the initial state of the redux store

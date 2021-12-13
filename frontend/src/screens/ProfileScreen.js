@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Col, Row, Form, Button } from 'react-bootstrap'
+import { Col, Row, Form, Button, Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import {LinkContainer} from "react-router-bootstrap"
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getUserDetails, updateUserProfile } from "../actions/userActions"
-
+import {getUserOrdersList} from "../actions/orderActions"
 
 const ProfileScreen = ({location, history}) => {
     const [name, setName] = useState('')
@@ -26,12 +27,17 @@ const ProfileScreen = ({location, history}) => {
     const userUpdateProfile = useSelector(state => state.userUpdateProfile)
     const { success } = userUpdateProfile
 
+    const userOrdersList = useSelector(state => state.userOrdersList)
+    const { error:errorOnOrders, loading:loadingOrders, orders } = userOrdersList
+    
+    
     useEffect(() => {
         if(!userInfo){
             history.push('/login')
         } else {
             if(!user.name){
                 dispatch(getUserDetails('profile'))
+                dispatch(getUserOrdersList())
             } else {
                 setName(user.name)
                 setEmail(user.email)
@@ -53,7 +59,7 @@ const ProfileScreen = ({location, history}) => {
     return (
         <Row>
             <Col md={3}>
-                <Link to="/">Go back</Link>
+                <Link to="/" className="btn btn-light my-3"><i className="fas fa-arrow-left"></i> Go back</Link>
                 <h2>My Profile</h2>
                 {message && <Message variant='danger'>{message}</Message>}
                 {error && <Message variant='danger'>{error}</Message>}
@@ -102,13 +108,47 @@ const ProfileScreen = ({location, history}) => {
                         ></Form.Control>
                     </Form.Group>
         
-                    <Button type='submit' variant='primary'>
+                    <Button style={{marginTop: '20px'}} type='submit' variant='primary'>
                         Update
                     </Button>
                 </Form>
             </Col>
             <Col md={9}>
                 <h3>My Orders</h3>
+                {
+                    loadingOrders ? <Loader/> 
+                    : errorOnOrders ? <Message variant="danger">{errorOnOrders}</Message>
+                    : (
+                        <Table striped bordered hover responsive className='table-sm'>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Paid</th>
+                                    <th>Delivered</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orders.map(order => (
+                                    <tr key={order._id}>
+                                        <td>{order._id}</td>
+                                        <td>{order.createdAt.substring(0, 10)}</td>
+                                        <td>${order.totalPrice}</td>
+                                        <td>{order.isPaid ? order.paidOn.substring(0, 10) : ( <i className='fas fa-times' style={{color: 'red'}}></i> )}</td>
+                                        <td>{order.isDelivered ? order.deliveredOn.substring(0, 10) : ( <i className='fas fa-times' style={{color: 'red'}}></i> )}</td>
+                                        <td>
+                                            <LinkContainer to={`/order/${order._id}`}>
+                                                <Button className='btn-sm' variant='light'>Details</Button>
+                                            </LinkContainer>
+                                        </td>
+                                    </tr>
+                                ))}                                
+                            </tbody>
+                        </Table>
+                    )
+                }
             </Col>
         </Row>
     )
