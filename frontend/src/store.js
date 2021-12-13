@@ -17,7 +17,8 @@ import {
     userLoginReducer, 
     userRegisterReducer, 
     userDetailsReducer, 
-    userUpdateProfileReducer 
+    userUpdateProfileReducer, 
+    userListReducer
 } from "./reducers/userReducers";
 
 import { 
@@ -37,10 +38,12 @@ const reducer = combineReducers({
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
+    userOrdersList: userOrderListReducer,
+    usersList: userListReducer,
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
     orderPay: orderPayReducer,
-    userOrdersList: userOrderListReducer
+
 })
 
 // get cart items from local storage to add to the initial state of the redux store
