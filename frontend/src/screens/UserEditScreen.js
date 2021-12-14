@@ -6,8 +6,8 @@ import { Form, Button } from 'react-bootstrap'
 import FormContainer from "../components/FormContainer"
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { getUserDetails } from "../actions/userActions"
-
+import { getUserDetails, updateUser } from "../actions/userActions"
+import { USER_UPDATE_RESET } from '../constants/userConstants'
 
 const UserEditScreen = ({match, history}) => {
     const userId = match.params.userId
@@ -20,19 +20,28 @@ const UserEditScreen = ({match, history}) => {
     const userDetails = useSelector(state => state.userDetails)
     const { loading, error, user } = userDetails
 
+    const userUpdate = useSelector(state => state.userUpdate)
+    const {loading:loadingOnUpdate, error:errorOnUpdate, success:successOnUpdate} = userUpdate
+
     useEffect(() => {
-       if(!user.name || user._id !== userId){
-           dispatch(getUserDetails(userId))
+       if(successOnUpdate){
+           dispatch({type: USER_UPDATE_RESET})
+           history.push('/admin/users')
        } else {
-           setName(user.name)
-           setEmail(user.email)
-           setIsAdmin(user.isAdmin)
-       }
-    }, [user, userId, dispatch])
+        if(!user.name || user._id !== userId){
+            dispatch(getUserDetails(userId))
+        } else {
+            setName(user.name)
+            setEmail(user.email)
+            setIsAdmin(user.isAdmin)
+        }
+       } 
+       
+    }, [user, userId, dispatch, successOnUpdate, history])
 
     const submitHandler = (e)=>{
         e.preventDefault()
-
+        dispatch(updateUser({_id: userId, name, email, isAdmin}))
     }
 
     return (
@@ -41,6 +50,8 @@ const UserEditScreen = ({match, history}) => {
             
             <FormContainer>
                 <h1>Edit user</h1>
+                {loadingOnUpdate && <Loader/>}
+                {errorOnUpdate && <Message variant='danger'>{errorOnUpdate}</Message>}
                 {
                     loading ? <Loader/>
                     : error ? <Message variant='danger'>{error}</Message>
