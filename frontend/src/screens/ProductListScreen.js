@@ -6,7 +6,7 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 
-import { fetchProductsList } from '../actions/productActions'
+import { deleteProduct, fetchProductsList } from '../actions/productActions'
 
 
 const ProductListScreen = ({history, match}) => {
@@ -15,6 +15,7 @@ const ProductListScreen = ({history, match}) => {
     const {loading, products, error} = useSelector(state => state.productList)
     const { userInfo } = useSelector(state => state.userLogin)
     
+    const {loading:loadingDelete,sucess:successDelete, error:errorDelete} = useSelector(state => state.productDelete)
 
     useEffect(()=>{
         if(userInfo && userInfo.isAdmin){
@@ -22,14 +23,17 @@ const ProductListScreen = ({history, match}) => {
         } else {
             history.push('/login')
         }    
-    }, [dispatch, history, userInfo])
+    }, [dispatch, history, userInfo, successDelete])
     
     const deleteProductHandler = (productId)=>{
         // dipatch delete product by id
+        if(window.confirm('Are you sure you want to delete this product?')){
+            dispatch(deleteProduct(productId))
+        }
     }
 
     const createProductHandler = ()=>{
-
+        
     }
     return (
         <React.Fragment>
@@ -44,7 +48,8 @@ const ProductListScreen = ({history, match}) => {
                 </Col>
 
             </Row>
-
+            {loadingDelete && <Loader/>}
+            {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
             {
                 loading ? <Loader/>
                 : error ? <Message variant='danger'>{error}</Message>
