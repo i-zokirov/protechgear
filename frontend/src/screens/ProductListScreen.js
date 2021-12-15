@@ -6,8 +6,8 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 
-import { deleteProduct, fetchProductsList } from '../actions/productActions'
-
+import { deleteProduct, fetchProductsList, createProduct } from '../actions/productActions'
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductListScreen = ({history, match}) => {
     const dispatch = useDispatch()
@@ -16,14 +16,22 @@ const ProductListScreen = ({history, match}) => {
     const { userInfo } = useSelector(state => state.userLogin)
     
     const {loading:loadingDelete,sucess:successDelete, error:errorDelete} = useSelector(state => state.productDelete)
-
+    const {loading:loadingCreate, success:successCreate, error:errorCreate, product:createdProduct} = useSelector(state => state.productCreate)
+    
     useEffect(()=>{
-        if(userInfo && userInfo.isAdmin){
-            dispatch(fetchProductsList())
-        } else {
+        dispatch({type: PRODUCT_CREATE_RESET})
+        
+        if(!userInfo.isAdmin){
             history.push('/login')
-        }    
-    }, [dispatch, history, userInfo, successDelete])
+        } 
+        
+        if(successCreate){
+            history.push(`/admin/products/${createdProduct._id}/edit`)
+        } else {
+            dispatch(fetchProductsList())
+        }
+        
+    }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct])
     
     const deleteProductHandler = (productId)=>{
         // dipatch delete product by id
@@ -32,8 +40,8 @@ const ProductListScreen = ({history, match}) => {
         }
     }
 
-    const createProductHandler = ()=>{
-        
+    const createProductHandler = ()=> {
+        dispatch(createProduct())
     }
     return (
         <React.Fragment>
@@ -48,6 +56,8 @@ const ProductListScreen = ({history, match}) => {
                 </Col>
 
             </Row>
+            {loadingCreate && <Loader/>}
+            {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
             {loadingDelete && <Loader/>}
             {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
             {
@@ -62,6 +72,7 @@ const ProductListScreen = ({history, match}) => {
                                <th>Price</th> 
                                <th>Category</th> 
                                <th>Brand</th>
+                               <th>Stock count</th>
                                <th></th> 
                             </tr>
                         </thead>
@@ -73,6 +84,7 @@ const ProductListScreen = ({history, match}) => {
                                     <td>${product.price}</td>
                                     <td>{product.category}</td>
                                     <td>{product.brand}</td>
+                                    <td>{product.countInStock > 0 ? product.countInStock : 'out of stock'}</td>
                                     <td>
                                         <LinkContainer to={`/admin/products/${product._id}/edit`}>
                                             <Button variant='light' className='btn-sm'>
