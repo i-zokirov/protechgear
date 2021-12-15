@@ -15,27 +15,30 @@ const ProductListScreen = ({history, match}) => {
     const {loading, products, error} = useSelector(state => state.productList)
     const { userInfo } = useSelector(state => state.userLogin)
     
-    const {loading:loadingDelete,sucess:successDelete, error:errorDelete} = useSelector(state => state.productDelete)
+    const {loading:loadingDelete,success:successDelete, error:errorDelete} = useSelector(state => state.productDelete)
     const {loading:loadingCreate, success:successCreate, error:errorCreate, product:createdProduct} = useSelector(state => state.productCreate)
     
     useEffect(()=>{
         dispatch({type: PRODUCT_CREATE_RESET})
         
-        if(!userInfo.isAdmin){
-            history.push('/login')
-        } 
+        if(userInfo){
+            if(!userInfo.isAdmin){
+                history.push('/login')
+            } 
+        }
         
         if(successCreate){
             history.push(`/admin/products/${createdProduct._id}/edit`)
         } else {
             dispatch(fetchProductsList())
+
         }
         
     }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct])
     
-    const deleteProductHandler = (productId)=>{
+    const deleteProductHandler = ({_id:productId, name})=>{
         // dipatch delete product by id
-        if(window.confirm('Are you sure you want to delete this product?')){
+        if(window.confirm(`Are you sure you want to delete this [${name}]?`)){
             dispatch(deleteProduct(productId))
         }
     }
@@ -56,9 +59,8 @@ const ProductListScreen = ({history, match}) => {
                 </Col>
 
             </Row>
-            {loadingCreate && <Loader/>}
+            {loadingCreate && loadingDelete && <Loader/>}
             {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
-            {loadingDelete && <Loader/>}
             {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
             {
                 loading ? <Loader/>
@@ -91,7 +93,7 @@ const ProductListScreen = ({history, match}) => {
                                                 <i className='fas fa-edit'></i>
                                             </Button>
                                         </LinkContainer>
-                                        <Button variant='danger' className='btn-sm' onClick={() => deleteProductHandler(product._id)}>
+                                        <Button variant='danger' className='btn-sm' onClick={() => deleteProductHandler(product)}>
                                             <i className='fas fa-trash'></i>
                                         </Button>
                                     </td>
