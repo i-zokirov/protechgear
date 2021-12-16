@@ -39,6 +39,7 @@ export const cartReducer = (state = {cartItems: [], shippingAddress: {}}, action
                 paymentMethod: action.payload
                 }
         case CART_RESET:
+            localStorage.setItem('cartItems', [])
             return {
                 ...state,
                 cartItems: []

@@ -12,6 +12,9 @@ import {
     USER_ORDER_LIST_SUCCESS, 
     USER_ORDER_LIST_FAILURE,
     USER_ORDER_LIST_REQUEST,
+    ORDER_LIST_SUCCESS, 
+    ORDER_LIST_FAILURE,
+    ORDER_LIST_REQUEST,
 } from "../constants/orderConstants";
 import { CART_RESET } from "../constants/cartConstant";
 
@@ -30,6 +33,7 @@ export const createOrder = (order) => {
             const { data } = await axios.post('/api/orders', order, config)
             dispatch({type: ORDER_CREATE_SUCCESS, payload: data})
             dispatch({type: CART_RESET})
+            
         } catch (error) {
             dispatch({
                 type: ORDER_CREATE_FAILURE,
@@ -102,6 +106,28 @@ export const getUserOrdersList = () => {
         } catch (error) {
             dispatch({
                 type: USER_ORDER_LIST_FAILURE,
+                payload: error.response && error.response.data.message ? error.response.data.message  : error.message
+            })
+        }
+    }
+}
+
+export const getOrdersList = () => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({type: ORDER_LIST_REQUEST})
+
+            const { userLogin: { userInfo } } = getState()
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            }
+            const { data } = await axios.get('/api/orders',  config)
+            dispatch({type: ORDER_LIST_SUCCESS, payload: data})
+        } catch (error) {
+            dispatch({
+                type: ORDER_LIST_FAILURE,
                 payload: error.response && error.response.data.message ? error.response.data.message  : error.message
             })
         }
