@@ -27,3 +27,5 @@ yarn-error.log*
 /backend/seeder.js
 /backend/data
 /backend/data/products.js
+
+/log
