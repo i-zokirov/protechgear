@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import {LinkContainer} from "react-router-bootstrap"
 import { useDispatch, useSelector } from 'react-redux'
 import { Table, Button } from 'react-bootstrap'
-
+import {Link } from "react-router-dom"
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {getOrdersList} from '../actions/orderActions'
@@ -23,7 +23,7 @@ const OrdersListScreen = ({history}) => {
     
     return (
         <React.Fragment>
-            <h1>Users</h1>
+            <h1>Orders</h1>
             {
                 loading ? <Loader/>
                 : error ? <Message variant='danger'>{error}</Message>
@@ -44,13 +44,17 @@ const OrdersListScreen = ({history}) => {
                             {orders.map(order => (
                                 <tr key={order._id}>
                                     <td>{order._id}</td>
-                                    <td>{order.user.name}</td>
+                                    <td>
+                                        <Link to={`/admin/users/${order.user._id}/edit`}>
+                                            {order.user.name}
+                                        </Link>
+                                    </td>
                                     <td>${order.totalPrice}</td>
                                     <td>{order.createdAt.substring(0, 10) }</td>
                                     <td>{order.isPaid ? order.paidOn.substring(0, 10) : 'Not Paid'}</td>
                                     <td>{order.isDelivered ? order.deliveredOn.substring(0, 10)  : 'Not Delivered'}</td>
                                     <td>
-                                        <LinkContainer to={`/admin/orders/${order._id}/edit`}>
+                                        <LinkContainer to={`/admin/orders/${order._id}`}>
                                             <Button variant='light' className='btn-sm'>
                                                 <i className='fas fa-edit'></i>
                                             </Button>

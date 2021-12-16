@@ -2,16 +2,16 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Image, ListGroup, Card } from 'react-bootstrap'
+import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap'
 import { PayPalButton } from "react-paypal-button-v2";
 
 import Message from "../components/Message"
 import Loader from "../components/Loader"
-import { getOrderDetails, payOrder } from '../actions/orderActions'
-import { ORDER_PAY_RESET } from '../constants/orderConstants'
+import { getOrderDetails, payOrder, makeOrderDelivered } from '../actions/orderActions'
+import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants'
 
 
-const PlaceOrderScreen = ({match}) => {
+const PlaceOrderScreen = ({match, history}) => {
     const orderId = match.params.orderId
     const dispatch = useDispatch()
     
@@ -22,8 +22,11 @@ const PlaceOrderScreen = ({match}) => {
     // get order details from state
     const { order, loading, error } = useSelector(state => state.orderDetails)
     
-    // if content is not loading, dynamically calculate the itemsprice
-    if(!loading){
+    const {userInfo} = useSelector(state => state.userLogin)
+    const {success:successDeliver ,loading:loadingDeliver, error:errorDeliver} = useSelector(state => state.orderDeliver)
+    
+    // if content is not loading or there is no error with fetching order, dynamically calculate the itemsprice
+    if(!loading && !error){
         const addDecimals = (num) => {
             return (Math.round(num * 100) / 100).toFixed(2)
         }
@@ -43,30 +46,48 @@ const PlaceOrderScreen = ({match}) => {
             document.body.appendChild(script)
         }
 
+        if(!userInfo){
+            history.push('/login')
+        } else if (userInfo && userInfo.isAdmin){
+            history.push(`/admin/orders/${orderId}`) 
+        }
+
         
         // dispatch action to fetch order details based on order Id from params
-        if(!order || order._id !== orderId || successPay){
+        if(!order || order._id !== orderId || successPay || successDeliver){
+            dispatch({type: ORDER_DELIVER_RESET})
             // Resetting order pay in order to exit the infinite loop on successful payment
             dispatch({type: ORDER_PAY_RESET})
             // dispatching action to get order details
             dispatch(getOrderDetails(orderId))
         } else if(!order.isPaid){
-            // injecting papal script if order is not paid
+            // injecting paypal script if order is not paid
             if(!window.paypal){
                 addPayPalScript()
             } else {
                 setSdkReady(true)
             }
         }
-    }, [dispatch, orderId, order, successPay])
+
+    }, [dispatch, orderId, order, successPay, userInfo, history, successDeliver])
 
     const successPaymentHandler = (paymentResult)=>{
         // dispatch action for payOrder and update the order record 
         dispatch(payOrder(orderId, paymentResult))
     }
 
+
+    const markOrderDeliveredHandler = ()=>{
+        dispatch(makeOrderDelivered(orderId))
+    }
+
     return loading ? <Loader/> 
-    : error ? <Message variant="danger">{error}</Message>
+    : error ? (
+        <>
+        <Link to="/" className="btn btn-light my-3"><i className="fas fa-arrow-left"></i> Home page</Link>
+        <Message variant="danger">{error}</Message>
+        </>
+    )
     : <React.Fragment>
         <h1>Order - {order._id}</h1>
         <Row>
@@ -167,7 +188,7 @@ const PlaceOrderScreen = ({match}) => {
                             </Row>
                         </ListGroup.Item>
 
-                        {!order.isPaid && (
+                        {userInfo && !order.isPaid && !userInfo.isAdmin && (
                             <ListGroup.Item>
                                 {loadingPay && <Loader/>}
                                 {!sdkReady ? (
@@ -175,6 +196,16 @@ const PlaceOrderScreen = ({match}) => {
                                 ) : (
                                     <PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler}/>
                                 )}
+                            </ListGroup.Item>
+                        )}
+
+                        {userInfo && !order.isDelivered && order.isPaid && userInfo.isAdmin && (
+                            <ListGroup.Item>
+                                {loadingDeliver && <Loader/>}
+                                {errorDeliver && <Message>{errorDeliver}</Message>}
+                                <Button type="button" className='btn-block' onClick={markOrderDeliveredHandler}>
+                                    Mark as Delivered
+                                </Button> 
                             </ListGroup.Item>
                         )}
                        
