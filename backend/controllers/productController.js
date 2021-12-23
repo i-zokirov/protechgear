@@ -5,8 +5,18 @@ import Product from "../models/productModel.js"
 
 
 export const getProducts = asyncHandler(async(req, res)=>{
-    const products = await Product.find({})
-    res.json(products)
+    const keyword = req.query.keyword ? {
+        name: {
+            $regex: req.query.keyword,
+            $options : 'i'
+        }
+    } : {}
+    const products = await Product.find({...keyword})
+    if(products.length === 0 && keyword){
+        res.status(404)
+        throw new Error('Nothing found with this keyword')
+    }
+    res.json(products) 
 })
 
 

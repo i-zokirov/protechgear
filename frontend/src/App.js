@@ -31,6 +31,7 @@ const App  = ()=>{
         <Container>
           
             <Route path="/" component={HomeScreen} exact />
+            <Route path="/search/:keyword" component={HomeScreen}  />
             <Route path="/product/:productId" component={ProductScreen}/>
             <Route path="/cart/:productId?" component={CartScreen}/>
             <Route path="/login" component={LoginScreen}/>
