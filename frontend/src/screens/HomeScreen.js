@@ -6,35 +6,42 @@ import { fetchProductsList } from '../actions/productActions'
 import Product from '../components/Product'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import Paginate from '../components/Paginate'
+
 
 const HomeScreen = ({match}) => {
     const keyword = match.params.keyword
-    const dispatch = useDispatch()
+    const pageNumber = match.params.pageNumber
+
+    const dispatch = useDispatch({match})
+
     const productList = useSelector(state=> state.productList)
-    const {loading, error, products} = productList
+    const {loading, error, products, page, pages} = productList
 
     useEffect(()=>{
-        dispatch(fetchProductsList(keyword))
-    }, [dispatch, keyword])
+        dispatch(fetchProductsList(keyword, pageNumber))
+    }, [dispatch, keyword, pageNumber])
 
-    const renderProducts = (products)=>{
-        return (
-            <Row>
-                {products.map((product) => (
-                    <Col className='align-items-stretch d-flex' key={product._id} sm={12} md={6} lg={4} xl={3}>
-                        <Product  product={product} />
-                    </Col>
-                ))}
-            </Row>
-        )
-    }
+  
     return (
         <React.Fragment>
             <h1>Latest Products</h1>
             {
             loading ? <Loader/> 
             : error ? <Message variant="danger">{error}</Message> 
-            : renderProducts(products)
+            : (
+                <>
+                <Row>
+                    {products.map((product) => (
+                        <Col className='align-items-stretch d-flex' key={product._id} sm={12} md={6} lg={4} xl={3}>
+                            <Product  product={product} />
+                        </Col>
+                    ))}
+                </Row>
+                
+                <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''}  />
+                </>
+            )
             }     
         </React.Fragment>
     )

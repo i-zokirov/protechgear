@@ -5,18 +5,25 @@ import Product from "../models/productModel.js"
 
 
 export const getProducts = asyncHandler(async(req, res)=>{
+    const pageSize = 2
+    const page = Number(req.query.pageNumber) || 1
     const keyword = req.query.keyword ? {
         name: {
             $regex: req.query.keyword,
             $options : 'i'
         }
     } : {}
+    const count = await Product.countDocuments({...keyword})
     const products = await Product.find({...keyword})
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+
+
     if(products.length === 0 && keyword){
         res.status(404)
         throw new Error('Nothing found with this keyword')
     }
-    res.json(products) 
+    res.json({products, page, pages: Math.ceil(count / pageSize)}) 
 })
 
 
