@@ -26,6 +26,14 @@ export const getProducts = asyncHandler(async(req, res)=>{
     res.json({products, page, pages: Math.ceil(count / pageSize)}) 
 })
 
+// @desc:   Get top rated products
+// @route:  GET /api/products
+// @access: PUBLIC
+export const getTopProducts = asyncHandler(async(req, res)=>{
+    const products = await Product.find({}).sort({rating: 1}).limit(3)
+    res.json(products)
+})
+
 
 export const getSingleProduct = asyncHandler(async(req, res)=>{
     const product = await Product.findById(req.params.productId)

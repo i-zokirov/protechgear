@@ -1,5 +1,5 @@
 import express from "express"
-import { getSingleProduct, getProducts, deleteProductById, updateProduct, createProduct, createProductReview } from "../controllers/productController.js"
+import { getSingleProduct, getProducts, deleteProductById, updateProduct, createProduct, createProductReview, getTopProducts } from "../controllers/productController.js"
 import { protect, isAdmin } from "../middleware/authMiddleware.js"
 
 const router =  express.Router()
@@ -9,6 +9,8 @@ router.route('/')
     .get(getProducts)
     .post(protect, isAdmin, createProduct)
 
+router.route('/top')
+    .get(getTopProducts)
 
 router.route('/:productId')
     .get(getSingleProduct)
