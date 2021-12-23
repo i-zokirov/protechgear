@@ -23,9 +23,9 @@ const app = express()
 const accessLogStream = rfs.createStream('access.log', {
     interval: '1d', // rotate daily
     path: path.join(__dirname, 'log')
-  })
-   
-  // setup the logger
+})
+
+// setup the logger
 app.use(morgan('combined', { stream: accessLogStream }))
 
 app.use(express.json())
