@@ -5,14 +5,14 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-
+import Paginate from '../components/Paginate'
 import { deleteProduct, fetchProductsList, createProduct } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductListScreen = ({history, match}) => {
     const dispatch = useDispatch()
-
-    const {loading, products, error} = useSelector(state => state.productList)
+    const pageNumber = match.params.pageNumber || 1
+    const {loading, products, error, page, pages} = useSelector(state => state.productList)
     const { userInfo } = useSelector(state => state.userLogin)
     
     const {loading:loadingDelete,success:successDelete, error:errorDelete} = useSelector(state => state.productDelete)
@@ -30,11 +30,11 @@ const ProductListScreen = ({history, match}) => {
         if(successCreate){
             history.push(`/admin/products/${createdProduct._id}/edit`)
         } else {
-            dispatch(fetchProductsList())
+            dispatch(fetchProductsList('', pageNumber))
 
         }
         
-    }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct])
+    }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct, pageNumber])
     
     const deleteProductHandler = ({_id:productId, name})=>{
         // dipatch delete product by id
@@ -66,6 +66,7 @@ const ProductListScreen = ({history, match}) => {
                 loading ? <Loader/>
                 : error ? <Message variant='danger'>{error}</Message>
                 : (
+                    <>
                     <Table striped bordered hover responsive className='table-sm'>
                         <thead>
                             <tr>
@@ -101,6 +102,8 @@ const ProductListScreen = ({history, match}) => {
                             ))}
                         </tbody>
                     </Table>
+                    <Paginate page={page} pages={pages} isAdmin={true}/>
+                    </>
                 )
             }
         </React.Fragment>

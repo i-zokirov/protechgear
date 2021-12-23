@@ -46,10 +46,11 @@ const App  = ()=>{
             <Route path="/admin/users" exact component={UserListScreen}/>
             <Route path="/admin/users/:userId/edit" exact component={UserEditScreen}/>
             <Route path="/admin/products" exact component={ProductListScreen}/>
+            <Route path="/admin/products/page/:pageNumber" exact component={ProductListScreen}/>
             <Route path="/admin/products/:productId/edit" exact component={ProductEditScreen}/>
             <Route path="/admin/orders" exact component={OrdersListScreen}/>
             <Route path="/admin/orders/:orderId" component={OrderScreen}/>
-        
+
         </Container>
       </main>
       <Footer/>
