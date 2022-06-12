@@ -27,7 +27,7 @@ export const getProducts = asyncHandler(async(req, res)=>{
 })
 
 // @desc:   Get top rated products
-// @route:  GET /api/products
+// @route:  GET /api/products/top
 // @access: PUBLIC
 export const getTopProducts = asyncHandler(async(req, res)=>{
     const products = await Product.find({}).sort({rating: 1}).limit(3)

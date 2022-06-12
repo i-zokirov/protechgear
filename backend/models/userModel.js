@@ -19,6 +19,11 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    agreedToTermsAndConditions: {
+        type: Boolean,
+        required: true,
+        default: false
     } 
 }, {
     timestamps: true

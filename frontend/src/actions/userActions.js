@@ -58,7 +58,7 @@ export const logout = ()=>{
     }
 }
 
-export const register = (name, email, password) => {
+export const register = ({name, email, password, terms}) => {
     return async (dispatch) => {
         try {
             dispatch({type: USER_REGISTER_REQUEST})
@@ -67,7 +67,7 @@ export const register = (name, email, password) => {
                     'Content-Type': 'application/json'
                 }
             }
-            const { data } = await axios.post('/api/users', { name, email, password }, config)
+            const { data } = await axios.post('/api/users', { name, email, password, terms }, config)
             // dispatching user registration upon success
             dispatch({type: USER_REGISTER_SUCCESS, payload: data})
             // dispatching user login right after
@@ -122,6 +122,8 @@ export const updateUserProfile = (user) => {
             }
             const { data } = await axios.put(`/api/users/profile`, user, config)
             dispatch({type: USER_UPDATE_PROFILE_SUCCESS, payload: data})
+            dispatch({type: USER_LOGIN_SUCCESS, payload: data})
+            localStorage.setItem('userInfo', JSON.stringify(data))
         } catch (error) {
             dispatch({
                 type: USER_UPDATE_PROFILE_FAIL,

@@ -22,7 +22,7 @@ export const authUser =  asyncHandler(async(req, res)=>{
 
 
 export const registerUser =  asyncHandler(async(req, res)=>{
-    const { email, password, name } = req.body
+    const { email, password, name, terms } = req.body
 
     const userExists = await User.findOne({email})
     if(userExists){
@@ -33,7 +33,8 @@ export const registerUser =  asyncHandler(async(req, res)=>{
     const newUser = await User.create({
         name,
         email,
-        password
+        password,
+        agreedToTermsAndConditions: terms
     })
     if(newUser){
         res.status(201).json({
