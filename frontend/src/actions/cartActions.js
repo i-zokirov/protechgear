@@ -40,7 +40,7 @@ export const removeFromCart = (productId) => {
 }
 
 export const saveShippingAddress = (data)=>{
-    return async (dispatch) => {
+    return (dispatch) => {
         dispatch({
             type: CART_SAVE_SHIPPING_ADDRESS,
             payload: data

@@ -52,7 +52,7 @@ const LoginScreen = ({location, history}) => {
             <Form.Control
               type='email'
               placeholder='Enter email'
-              value={formik.email}
+              value={formik.values.email}
               onChange={formik.handleChange}
               isValid={formik.touched.email && !formik.errors.email}
               isInvalid={!!formik.errors.email}
@@ -68,7 +68,7 @@ const LoginScreen = ({location, history}) => {
             <Form.Control
               type='password'
               placeholder='Enter password'
-              value={formik.password}
+              value={formik.values.password}
               onChange={formik.handleChange}
               isValid={formik.touched.password && !formik.errors.password}
               isInvalid={!!formik.errors.password}

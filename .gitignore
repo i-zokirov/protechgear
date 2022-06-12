@@ -29,3 +29,6 @@ yarn-error.log*
 /backend/data/products.js
 
 /log
+
+/uploads
+Procfile
