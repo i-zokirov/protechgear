@@ -34,6 +34,12 @@ Full stack eCommerce platform built from the ground up with React, Redux, Expres
 
 ## Roadmap
 
+Follow along as I continue to add more features to the project. Keep an eye on the progress and the backlog [here](https://github.com/i-zokirov/protechgear/projects/1) 🙂
+
+You can view the current version of the app here at [protechgear.herokuapp.com](https://protechgear.herokuapp.com/)
+
+Pending Development plans:
+
 - Redis integrations
 
 - PM2 Cluster management Integration
