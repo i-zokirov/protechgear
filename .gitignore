@@ -27,8 +27,10 @@ yarn-error.log*
 /backend/seeder.js
 /backend/data
 /backend/data/products.js
+/backend/keys
 
 /log
 
 uploads
+/uploads
 Procfile

@@ -22,11 +22,18 @@ const ProductEditScreen = ({match, history}) => {
     const [uploading, setUploading] = useState(false)
     const dispatch = useDispatch()
     
+    const [errorOnUpload, setErrorOnUpload] = useState(null)
+
     const productDetails = useSelector(state => state.productDetail)
     const { loading, error, product } = productDetails
 
     const productUpdate = useSelector(state => state.productUpdate)
     const { loading:loadingUpdate, error:errorUpdate, success:successUpdate } = productUpdate
+
+    const { userInfo } = useSelector(state => state.userLogin)
+
+
+
 
     useEffect(() => {
         if(successUpdate){
@@ -68,12 +75,12 @@ const ProductEditScreen = ({match, history}) => {
         const formData = new FormData()
         formData.append('image', file)
         setUploading(true)
-        console.log(formData)
 
-        try {
+         try {
             const config = {
                 headers: {
                   'Content-Type': 'multipart/form-data',
+                  Authorization: `Bearer ${userInfo.token}`
                 },
               }
         
@@ -81,9 +88,8 @@ const ProductEditScreen = ({match, history}) => {
             setImage(data)
             setUploading(false)
         } catch (error) {
-            console.log(error)
             setUploading(false)
-
+            setErrorOnUpload(error.response && error.response.data.message ? error.response.data.message  : error.message)
         }
     }
     return (
@@ -94,6 +100,7 @@ const ProductEditScreen = ({match, history}) => {
                 <h1>Edit product</h1>
                 {loadingUpdate && <Loader/>}
                 {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+                {errorOnUpload && <Message variant='danger'>{errorOnUpload}</Message>}
                 {
                     loading ? <Loader/>
                     : error ? <Message variant='danger'>{error}</Message>
@@ -136,6 +143,7 @@ const ProductEditScreen = ({match, history}) => {
                                 <Form.Label>Upload image</Form.Label>
                                 <Form.Control 
                                 type="file" 
+                
                                 onChange={uploadFileHandler}
                                 />
                             </Form.Group>

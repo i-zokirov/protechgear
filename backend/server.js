@@ -1,18 +1,17 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import colors from 'colors'
+
 import path from "path"
 import morgan from 'morgan'
 import rfs from 'rotating-file-stream'
 
-import products from'./data/products.js'
 import connectDB from './config/db.js'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from "./routes/userRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
-import uploadRoutes from "./routes/uploadRoutes.js"
+import uploadRoutes from "./routes/uploadRoute.js"
 
 dotenv.config()
 connectDB()
