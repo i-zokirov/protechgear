@@ -12,7 +12,7 @@ Full stack eCommerce platform built from the ground up with React, Redux, Expres
 
 **Server:** Nodejs, Express
 
-**Databases:** MongoDB
+**Databases:** MongoDB, Google Cloud Storage
 
 
 ## Features
