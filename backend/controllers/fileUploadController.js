@@ -3,7 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 import fs from "fs"
 import processFileMiddleware from "../middleware/processFileMiddleware.js";
 
-const storageKey = JSON.parse(fs.readFileSync("backend\\keys\\storage-key.json", "utf-8"))
+const storageKey = JSON.parse(fs.readFileSync("backend/keys/storage-key.json", "utf-8"))
 
 const storage = new Storage({projectId: storageKey.project_id, credentials: storageKey})
 const bucketName = "product-images-protechgear"
