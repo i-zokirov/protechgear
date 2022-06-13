@@ -112,7 +112,19 @@ export const createProduct = () => {
                     Authorization: `Bearer ${userInfo.token}`
                 }
             }
-            const {data} = await axios.post(`/api/products`, {}, config)
+
+            const newProduct = {
+                name: 'Sample name',
+                price: 0,
+                user: userInfo._id,
+                image: '/images/sample.jpg',
+                brand: 'Sample brand',
+                category: 'Sample category',
+                countInStock: 0,
+                numReviews: 0,
+                description: 'Sample description'
+            }
+            const {data} = await axios.post(`/api/products`, newProduct, config)
             dispatch({type: PRODUCT_CREATE_SUCCESS, payload: data})
         } catch (error) {
             dispatch({

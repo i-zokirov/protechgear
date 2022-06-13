@@ -42,7 +42,7 @@ const ProductEditScreen = ({match, history}) => {
         } else {
             if(!product.name || product._id !== productId){
                 dispatch(fetchProductDetails(productId))
-            } else {
+            } else if(product) {
                 setName(product.name)
                 setImage(product.image)
                 setDescription(product.description)
@@ -160,7 +160,7 @@ const ProductEditScreen = ({match, history}) => {
                             </Form.Group>
 
                             <Form.Group controlId='countInStock'>
-                                <Form.Label>countInStock</Form.Label>
+                                <Form.Label>In Stock</Form.Label>
                                 <Form.Control
                                 type='number'
                                 placeholder='Enter countInStock'
@@ -180,12 +180,13 @@ const ProductEditScreen = ({match, history}) => {
                             </Form.Group>
 
                             <Form.Group controlId='description'>
-                                <Form.Label>description</Form.Label>
+                                <Form.Label>Description</Form.Label>
                                 <Form.Control
-                                type='text'
+                              
                                 placeholder='Enter description'
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
+                                as="textarea" rows={5}
                                 ></Form.Control>
                             </Form.Group>
 
