@@ -4,7 +4,7 @@ import { reviewSchema } from "../utils/joi.js";
 const validateReviewProps = expressAsyncHandler(async (req, res, next) => {
     try {
         const {error} = reviewSchema.validate(req.body)
-        if(error && error.message !== '"_id" is not allowed'){
+        if(error){
           throw new Error(error.message)
         } 
         next()

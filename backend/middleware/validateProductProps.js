@@ -4,7 +4,7 @@ import { productSchema } from "../utils/joi.js";
 const validateProductProps = expressAsyncHandler(async (req, res, next) => {
     try {
         const {error} = productSchema.validate(req.body)
-        if(error && error.message !== '"_id" is not allowed'){
+        if(error){
           throw new Error(error.message)
         } 
         next()
