@@ -51,7 +51,7 @@ export const upload = expressAsyncHandler(async (req, res) => {
 
     } catch (error) {
         if (error.code == "LIMIT_FILE_SIZE") {
-            throw new Error("File size cannot be larger than 2MB!")
+            throw new Error("File size cannot be larger than 20MB!")
         }
         throw error
     }
