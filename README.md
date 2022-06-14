@@ -46,4 +46,14 @@ Pending Development plans:
 
 - User email verification
 
+User email verification plan:
+ - User model should have an verified attribute that is false by default
+ - When the user submits a valid signup form, a new User is created (who's verified attribute will be false initially)
+ - Create a long random string (128 characters) with a crypto library and store it in the database (Google Datastore because good enough to store temporary values :P) with a reference to the User ID in MongoDB
+ - Send an email to the supplied email address (Using Gmail API because it is free :P) with the hash as part of a link pointing back to a route on the application server
+ - When the user clicks the link and hits the route, make sure user signs in first (in order to prevent a possibility to impersonate user email verification process) and then check for the hash passed in the URL, ensure the hashed token is not expired when clicked on.  
+ - If all statements above are positive, get the related user record from MongoDB and set the verified property to true
+ - Delete the hash from the Datastore, it is no longer needed
+ - User is now verified and authentic.
+
 
