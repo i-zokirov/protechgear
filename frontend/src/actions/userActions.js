@@ -24,8 +24,14 @@ import {
     USER_UPDATE_REQUEST,
     USER_UPDATE_SUCCESS,
     USER_UPDATE_FAIL,
+    EMAIL_VERIFICATION_REQUEST,
+    EMAIL_VERIFICATION_SUCCESS,
+    EMAIL_VERIFICATION_FAIL,
+    TOKEN_VERIFICATION_REQUEST,
+    TOKEN_VERIFICATION_SUCCESS,
 } from "../constants/userConstants"
 import {USER_ORDER_LIST_RESET} from "../constants/orderConstants"
+import { pushNotification } from "./notificationActions"
 
 export const login = (email, password) => {
     return async (dispatch)=>{
@@ -101,6 +107,51 @@ export const getUserDetails = (userIdOrProfile) => {
         } catch (error) {
             dispatch({
                 type: USER_DETAILS_FAIL,
+                payload: error.response && error.response.data.message ? error.response.data.message  : error.message
+            })
+        }
+    }
+}
+
+
+export const sendEmailVerificationLink = () => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({type: EMAIL_VERIFICATION_REQUEST})
+            const { userLogin: { userInfo } } = getState()
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${userInfo.token}`
+                }
+            }
+            await axios.get(`/api/users/profile/verifyEmail`, config)
+            dispatch({type: EMAIL_VERIFICATION_SUCCESS})
+            dispatch(pushNotification({type: "success", heading: "Success", message: "Email has been sent, please check your mailbox", autoDismiss: true}))
+        } catch (error) {
+             dispatch({
+                type: EMAIL_VERIFICATION_FAIL,
+                payload: error.response && error.response.data.message ? error.response.data.message  : error.message
+            })
+        }
+    }
+}
+
+export const confirmToken = (token) => {
+    return async(dispatch) => {
+        try {
+
+            dispatch({type: TOKEN_VERIFICATION_REQUEST})
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+            await axios.get(`/api/users/verifyToken?token=${token}`, config)
+            dispatch({type: TOKEN_VERIFICATION_SUCCESS})
+        } catch (error) {
+            dispatch({
+                type: EMAIL_VERIFICATION_FAIL,
                 payload: error.response && error.response.data.message ? error.response.data.message  : error.message
             })
         }

@@ -4,9 +4,10 @@ import { Col, Row, Form, Button, Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import {LinkContainer} from "react-router-bootstrap"
 
+import NotificationWithActionButton from "../components/NotificationWithActionButton"
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { getUserDetails, updateUserProfile } from "../actions/userActions"
+import { getUserDetails, sendEmailVerificationLink, updateUserProfile } from "../actions/userActions"
 import {getUserOrdersList} from "../actions/orderActions"
 
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
@@ -17,8 +18,9 @@ const ProfileScreen = ({location, history}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [profileVerified, setProfileVerified] = useState(false)
     const [message, setMessage] = useState(null)
-
+    const [showEmailVerificationState, setshowEmailVerificationState] = useState(true)
     const dispatch = useDispatch()
     
     const userDetails = useSelector(state => state.userDetails)
@@ -33,6 +35,7 @@ const ProfileScreen = ({location, history}) => {
     const userOrdersList = useSelector(state => state.userOrdersList)
     const { error:errorOnOrders, loading:loadingOrders, orders } = userOrdersList
     
+    const emailVerification = useSelector(state => state.emailVerification)
     
     useEffect(() => {
         if(!userInfo){
@@ -45,6 +48,7 @@ const ProfileScreen = ({location, history}) => {
             } else {
                 setName(user.name)
                 setEmail(user.email)
+                setProfileVerified(user.verified)
             }
         }
     }, [userInfo, history, dispatch, user, success])
@@ -57,7 +61,11 @@ const ProfileScreen = ({location, history}) => {
             // dispatch update profile
             dispatch(updateUserProfile({id: user._id, name, email, password}))
         }
-        
+    }
+
+    const handleSendEmail = () => {
+        dispatch(sendEmailVerificationLink("profile"))
+        setshowEmailVerificationState(false)
     }
 
     return (
@@ -68,7 +76,9 @@ const ProfileScreen = ({location, history}) => {
                 {message && <Message variant='danger'>{message}</Message>}
                 {error && <Message variant='danger'>{error}</Message>}
                 {success && <Message variant='success'>{'Profile has been updated!'}</Message>}
-                {loading && <Loader />}
+                {loading || emailVerification.loading ? <Loader /> : ''}
+    
+                {!profileVerified && <NotificationWithActionButton show={showEmailVerificationState} type="warning" message='Your email address was not verified. If you haven`t received email from us, check your spam folders or click the button below to resend.' buttonText="Resend" buttonAction={handleSendEmail} />}
                 <Form onSubmit={submitHandler}>
                 
                     <Form.Group controlId='name'>

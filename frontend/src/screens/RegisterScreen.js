@@ -8,7 +8,7 @@ import FormContainer from "../components/FormContainer"
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { register } from "../actions/userActions"
-
+import { pushNotification } from '../actions/notificationActions'
 
 const registerSchema = Yup.object({
     name: Yup.string().min(2, "Name must have at least 2 characters").max(30, "Name must be 30 characters or less").required("Name is required"),
@@ -30,8 +30,9 @@ const RegisterScreen = ({location, history}) => {
     useEffect(() => {
         if(userInfo){
             history.push(redirect)
+            dispatch(pushNotification({type: "success", heading: `Welcome ${userInfo.name}`, message: "Your account has been successfully registered. We have sent you an email to verify your account. Please click the link from the email to confirm your email address.", autoDismiss: false}))
         }
-    }, [userInfo, history, redirect])
+    }, [userInfo, history, redirect, dispatch])
 
 
     const formik = useFormik({

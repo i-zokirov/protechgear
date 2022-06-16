@@ -24,7 +24,13 @@ import {
     USER_UPDATE_SUCCESS,
     USER_UPDATE_FAIL,
     USER_UPDATE_RESET,
-    USER_UPDATE_PROFILE_RESET, 
+    USER_UPDATE_PROFILE_RESET,
+    EMAIL_VERIFICATION_REQUEST,
+    EMAIL_VERIFICATION_SUCCESS,
+    EMAIL_VERIFICATION_FAIL,
+    TOKEN_VERIFICATION_REQUEST,
+    TOKEN_VERIFICATION_SUCCESS,
+    TOKEN_VERIFICATION_FAIL, 
 } from "../constants/userConstants"
 
 export const userLoginReducer = (state={}, action)=>{
@@ -125,6 +131,52 @@ export const userUpdateReducer = (state = {user: {}}, action)=>{
         case USER_UPDATE_RESET:
             return { user: {} }
         default: 
+            return state
+    }
+}
+
+
+export const verifyEmailReducer = (state = {}, action) => {
+    switch(action.type){
+        case EMAIL_VERIFICATION_REQUEST:
+            return {
+                loading: true
+            }
+        case EMAIL_VERIFICATION_SUCCESS:
+            return{
+                loading: false,
+                success: true,
+            }
+        case EMAIL_VERIFICATION_FAIL:
+            return {
+                loading: false,
+                success: false,
+                error: action.payload
+            }
+        default:
+            return state
+    }
+}
+
+
+export const verifyTokenReducer = (state = {}, action) => {
+    switch(action.type){
+        case TOKEN_VERIFICATION_REQUEST:
+            return {
+                loading: true
+            }
+        case TOKEN_VERIFICATION_SUCCESS:
+            return{
+                loading: false,
+                success: true,
+            }
+        case TOKEN_VERIFICATION_FAIL:
+            return {
+                loading: false,
+                success: false,
+                error: action.payload
+            }
+        default:
             return state
     }
 }

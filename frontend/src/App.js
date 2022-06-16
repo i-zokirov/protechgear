@@ -1,6 +1,6 @@
-import React from "react";
+import React  from "react";
 import {BrowserRouter as Router, Route} from "react-router-dom";
-import { Container } from "react-bootstrap";
+import { Container,  } from "react-bootstrap";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -20,8 +20,8 @@ import UserEditScreen from './screens/UserEditScreen'
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import OrdersListScreen from "./screens/OrderListScreen";
-
-
+import Notification from "./components/Notification";
+import TokenScreen from "./screens/TokenScreen";
 const App  = ()=>{
 
   return (
@@ -29,8 +29,11 @@ const App  = ()=>{
       <Header/>
       <main className="py-3">
         <Container>
-          
+          <Container>
+            <Notification className="justify-content-md-center"/>
+          </Container>
             <Route path="/" component={HomeScreen} exact />
+            <Route path="/verifyToken" component={TokenScreen} exact />
             <Route path="/page/:pageNumber" component={HomeScreen}  />
             <Route path="/search/:keyword" component={HomeScreen} exact />
             <Route path="/search/:keyword/page/:pageNumber" component={HomeScreen}  />

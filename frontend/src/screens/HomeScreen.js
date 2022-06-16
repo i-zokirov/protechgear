@@ -10,6 +10,7 @@ import Paginate from '../components/Paginate'
 import ProductCarousel from '../components/ProductCarousel'
 import Meta from '../components/Meta'
 
+
 const HomeScreen = ({match}) => {
     const keyword = match.params.keyword
     const pageNumber = match.params.pageNumber
@@ -23,7 +24,7 @@ const HomeScreen = ({match}) => {
         dispatch(fetchProductsList(keyword, pageNumber))
     }, [dispatch, keyword, pageNumber])
 
-  
+    
     return (
         <React.Fragment>
             <Meta/>

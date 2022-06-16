@@ -25,7 +25,9 @@ import {
     userUpdateProfileReducer, 
     userListReducer,
     userDeleteReducer,
-    userUpdateReducer
+    userUpdateReducer,
+    verifyEmailReducer,
+    verifyTokenReducer
 } from "./reducers/userReducers";
 
 import { 
@@ -36,6 +38,7 @@ import {
     ordersListReducer,
     orderDeliverReducer
 } from "./reducers/orderReducers";
+import notificationReducer from "./reducers/notificationReducer";
 
 const middleware = [thunk]
 
@@ -61,6 +64,10 @@ const reducer = combineReducers({
     orderPay: orderPayReducer,
     orderDeliver: orderDeliverReducer,
     ordersList: ordersListReducer,
+    notification: notificationReducer,
+    emailVerification: verifyEmailReducer,
+    tokenVerification: verifyTokenReducer
+
 })
 
 // get cart items from local storage to add to the initial state of the redux store
@@ -72,14 +79,15 @@ const userInfoFromLocalStorage = localStorage.getItem('userInfo') ? JSON.parse(l
 // get shippingAddress from local storage if it is found in localstorage
 const shippingAddressFromLocalStorage = localStorage.getItem('shippingAddress') ? JSON.parse(localStorage.getItem('shippingAddress')) : {}
 
-const initialState = {
+export const initialState = {
     cart: {
         cartItems: cartItemsFromLocalStorage,
         shippingAddress: shippingAddressFromLocalStorage
     },
     userLogin: {
         userInfo: userInfoFromLocalStorage
-    }
+    },
+
 }
 
 const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)))

@@ -1,5 +1,7 @@
 import asyncHandler from "express-async-handler"
 import User from "../models/userModel.js"
+import { destroy, read, write } from "../services/datastore.js"
+import generateString from "../utils/generateString.js"
 import generateToken from "../utils/generateToken.js"
 
 export const authUser =  asyncHandler(async(req, res)=>{
@@ -37,6 +39,12 @@ export const registerUser =  asyncHandler(async(req, res)=>{
         agreedToTermsAndConditions: terms
     })
     if(newUser){
+        const data = {
+            created: Date.now(),
+            token: generateString(),
+            userId: JSON.stringify(newUser._id)
+        }
+        await write("emailconfirmation", data, JSON.stringify(newUser._id))
         res.status(201).json({
             _id: newUser._id,
             name: newUser.name,
@@ -62,12 +70,59 @@ export const getUserProfile = asyncHandler(async(req, res)=>{
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            verified: user.verified
         })
     } else {
         res.status(404)
         throw new Error('User not found')
     }
 
+})
+
+
+export const sendEmailVerificationLink = asyncHandler(async(req, res) => {
+    try {
+        const user = await User.findById(req.user._id)
+        if(user){
+            const data = {
+                created: Date.now(),
+                token: generateString(),
+                userId: JSON.stringify(user._id)
+            }
+            await write("emailconfirmation", data, JSON.stringify(user._id))
+
+            // TODO: SEND EMAIL TO USER EMAIL
+
+            // 
+
+            res.status(200).send("success")
+        } else {
+            res.status(404)
+            throw new Error('User not found')
+        }
+    } catch (error) {
+        throw error
+    }
+})
+
+
+export const verifyEmailToken = asyncHandler(async(req, res) => {
+    const token = req.query.token
+
+    try {
+        const result = await read("emailconfirmation" , token)
+        if(result.length){
+            await User.findByIdAndUpdate(JSON.parse(result[0].userId), {verified: true})
+            await destroy("emailconfirmation", result[0].userId)
+            res.status(200).json({message: "Your email has been verified!"})
+        } else {
+            res.status(404)
+            throw new Error('Token not found')
+        }
+    } catch (error) {
+        throw error
+    }
+    
 })
 
 export const updateUserProfile = asyncHandler( async(req, res)=>{
