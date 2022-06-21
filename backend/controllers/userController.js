@@ -1,3 +1,4 @@
+import axios from "axios"
 import asyncHandler from "express-async-handler"
 import User from "../models/userModel.js"
 import { destroy, read, write } from "../services/datastore.js"
@@ -84,16 +85,31 @@ export const sendEmailVerificationLink = asyncHandler(async(req, res) => {
     try {
         const user = await User.findById(req.user._id)
         if(user){
+            const token = generateString()
             const data = {
                 created: Date.now(),
-                token: generateString(),
+                token,
                 userId: JSON.stringify(user._id)
             }
             await write("emailconfirmation", data, JSON.stringify(user._id))
 
-            // TODO: SEND EMAIL TO USER EMAIL
+            const reqBody = {
+                recipientsObj: {
+                    from: "helloprotechgear@gmail.com",
+                    to: user.email,
+                    cc: "",
+                    bcc: ""
+                },
+                messageObj: {
+                    header: "Welcome to ProTechGear",
+                    body: `Please click the following link to verify your email address - https://protechgear.herokuapp.com/verifyToken?token=${token}`,
+                    footer: "Kind regards <br>ProTechGear"
+                }
+            }
 
-            // 
+            
+            await axios.post(`https://protechgear.lm.r.appspot.com/sendmail?auth=${process.env.auth}`, reqBody)
+            console.log(`EMAIL SENT TO ${user.email}`)
 
             res.status(200).send("success")
         } else {
