@@ -1,0 +1,41 @@
+{
+    "name": "protechgear",
+    "version": "1.0.0",
+    "description": "An eCommerce platform",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node backend/server",
+        "server": "nodemon backend/server",
+        "client": "npm start --prefix frontend",
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "data:import": "node backend/seeder",
+        "data:destroy": "node backend/seeder -d"
+    },
+    "author": "Ikboljon Zokirov",
+    "license": "ISC",
+    "dependencies": {
+        "@google-cloud/datastore": "^6.6.2",
+        "@google-cloud/storage": "^6.1.0",
+        "axios": "^0.27.2",
+        "bcryptjs": "^2.4.3",
+        "cloudinary": "^1.30.0",
+        "colors": "^1.4.0",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "express-async-handler": "^1.2.0",
+        "joi": "^17.6.0",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^6.0.13",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.4",
+        "nodemon": "^2.0.15",
+        "randomstring": "^1.2.2",
+        "rotating-file-stream": "^3.0.2",
+        "sanitize-html": "^2.7.0",
+        "uuid": "^8.3.2"
+    },
+    "devDependencies": {
+        "concurrently": "^6.4.0"
+    }
+}
