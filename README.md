@@ -16,7 +16,7 @@ Full stack eCommerce platform built from the ground up with React, Redux, Expres
 
 ## Demo
 
-Live demo can be viewed with the following link: [https://protechgear.herokuapp.com/](https://protechgear.herokuapp.com/)
+Live demo can be viewed with the following link: [https://protechgear.onrender.com](https://protechgear.onrender.com)
 
 Feel free to register with a dummy account to test the application features.
 
@@ -51,7 +51,7 @@ Feel free to register with a dummy account to test the application features.
 
 Follow along as I continue to add more features to the project. Keep an eye on the progress and the backlog [here](https://github.com/i-zokirov/protechgear/projects/1?fullscreen=true) 🙂
 
-You can view the current version of the app here at [protechgear.herokuapp.com](https://protechgear.herokuapp.com/)
+You can view the current version of the app here at [https://protechgear.onrender.com](https://protechgear.onrender.com)
 
 Pending Development plans:
 
