@@ -50,6 +50,7 @@ const LoginScreen = ({ location, history }) => {
                     <Form.Label>Email Address</Form.Label>
                     <Form.Control
                         type="email"
+                        autoFocus={true}
                         placeholder="Enter email"
                         value={formik.values.email}
                         onChange={formik.handleChange}
