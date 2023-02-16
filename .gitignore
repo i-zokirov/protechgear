@@ -24,11 +24,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/backend/seeder.js
-/backend/data
-/backend/data/products.js
-
-
 /log
 
 uploads
