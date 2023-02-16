@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Row, Form, Button } from "react-bootstrap";
+import Alert from "react-bootstrap/Alert";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import FormContainer from "../components/FormContainer";
@@ -45,6 +46,10 @@ const LoginScreen = ({ location, history }) => {
             <h1>Sign In</h1>
             {error && <Message variant="danger">{error}</Message>}
             {loading && <Loader />}
+            <Alert variant={"info"}>
+                You can sign in as Admin. Email: admin@example.com. Password:
+                123
+            </Alert>
             <Form noValidate onSubmit={formik.handleSubmit}>
                 <Form.Group controlId="email">
                     <Form.Label>Email Address</Form.Label>
