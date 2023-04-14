@@ -2,12 +2,7 @@ import fs from "fs";
 import { Datastore } from "@google-cloud/datastore";
 
 const datastoreKey = JSON.parse(
-    fs.readFileSync(
-        process.env.NODE_ENV === "production "
-            ? "/etc/secrets/datastore-key.json"
-            : "backend/keys/datastore-key.json",
-        "utf-8"
-    )
+    fs.readFileSync("/etc/secrets/datastore-key.json", "utf-8")
 );
 // Create a client
 const datastore = new Datastore({
