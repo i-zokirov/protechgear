@@ -4,7 +4,12 @@ import fs from "fs";
 import processFileMiddleware from "../middleware/processFileMiddleware.js";
 
 const storageKey = JSON.parse(
-    fs.readFileSync("/etc/secrets/storage-key.json", "utf-8")
+    fs.readFileSync(
+        process.env.NODE_ENV === "production"
+            ? "/etc/secrets/storage-key.json"
+            : "backend/keys/storage-key.json",
+        "utf-8"
+    )
 );
 
 const storage = new Storage({
